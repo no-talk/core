@@ -27,9 +27,9 @@ export const calculateRequest = <Event, Specification>(
   reducer: RequestReducer<Event>,
   target: Target<Specification>,
 ) => {
-  const recursion = (value: Record<string, unknown>, list?: MetadataList): Record<string, unknown> => {
+  const recursion = (value: Record<string, unknown>, list?: MetadataList): Specification => {
     if (!list) {
-      return value;
+      return value as Specification;
     }
 
     const { metadata, next } = list;
@@ -40,12 +40,12 @@ export const calculateRequest = <Event, Specification>(
   return recursion(value, target.prototype[ALIAS]);
 };
 
-export type ResponseReducer<Specification> = (value: Specification, metadata: Metadata<unknown>) => Specification;
+export type ResponseReducer<Specification> = (value: Partial<Specification>, metadata: Metadata<unknown>) => Specification;
 
-export const calculateResponse = <Specification>(value: Specification, reducer: ResponseReducer<Specification>, target: Target<Specification>) => {
-  const recursion = (value: Specification, list?: MetadataList): Specification => {
+export const calculateResponse = <Specification>(value: Partial<Specification>, reducer: ResponseReducer<Specification>, target: Target<Specification>) => {
+  const recursion = (value: Partial<Specification>, list?: MetadataList): Specification => {
     if (!list) {
-      return value;
+      return value as Specification;
     }
 
     const { metadata, next } = list;
