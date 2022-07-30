@@ -19,9 +19,14 @@ export type MetadataList = {
   readonly next?: MetadataList;
 };
 
-export type Reducer<T> = (value: Record<string, unknown>, event: T, metadata: Metadata<unknown>) => Record<string, unknown>;
+export type RequestReducer<T> = (value: Record<string, unknown>, event: T, metadata: Metadata<unknown>) => Record<string, unknown>;
 
-export const calculate = <T, Specification>(value: Record<string, unknown>, event: T, reducer: Reducer<T>, target: Target<Specification>) => {
+export const calculateRequest = <Event, Specification>(
+  value: Record<string, unknown>,
+  event: Event,
+  reducer: RequestReducer<Event>,
+  target: Target<Specification>,
+) => {
   const recursion = (value: Record<string, unknown>, list?: MetadataList): Record<string, unknown> => {
     if (!list) {
       return value;
@@ -30,6 +35,22 @@ export const calculate = <T, Specification>(value: Record<string, unknown>, even
     const { metadata, next } = list;
 
     return recursion(reducer(value, event, metadata), next);
+  };
+
+  return recursion(value, target.prototype[ALIAS]);
+};
+
+export type ResponseReducer<Specification> = (value: Specification, metadata: Metadata<unknown>) => Specification;
+
+export const calculateResponse = <Specification>(value: Specification, reducer: ResponseReducer<Specification>, target: Target<Specification>) => {
+  const recursion = (value: Specification, list?: MetadataList): Specification => {
+    if (!list) {
+      return value;
+    }
+
+    const { metadata, next } = list;
+
+    return recursion(reducer(value, metadata), next);
   };
 
   return recursion(value, target.prototype[ALIAS]);
