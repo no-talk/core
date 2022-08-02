@@ -40,10 +40,10 @@ export const calculateRequest = <Event, Specification>(
   return recursion(value, target.prototype[ALIAS]);
 };
 
-export type ResponseReducer<Specification> = (value: Partial<Specification>, metadata: Metadata<unknown>) => Specification;
+export type ResponseReducer = (value: Record<string, unknown>, metadata: Metadata<unknown>) => Record<string, unknown>;
 
-export const calculateResponse = <Specification>(value: Partial<Specification>, reducer: ResponseReducer<Specification>, target: Target<Specification>) => {
-  const recursion = (value: Partial<Specification>, list?: MetadataList): Specification => {
+export const calculateResponse = <Specification>(value: Record<string, unknown>, reducer: ResponseReducer, target: Target<Specification>) => {
+  const recursion = (value: Record<string, unknown>, list?: MetadataList): Specification => {
     if (!list) {
       return value as Specification;
     }
