@@ -21,7 +21,7 @@ export type MetadataList = {
 
 export type RequestReducer<Event> = (value: Record<string, unknown>, event: Event, metadata: Metadata<unknown>) => Record<string, unknown>;
 
-export const calculateRequest = <Event, Specification>(
+export const calculateRequest = <Event, Specification = any>(
   value: Record<string, unknown>,
   event: Event,
   reducer: RequestReducer<Event>,
@@ -42,7 +42,7 @@ export const calculateRequest = <Event, Specification>(
 
 export type ResponseReducer<Event> = (value: Record<string, unknown>, event: Event, metadata: Metadata<unknown>) => Record<string, unknown>;
 
-export const calculateResponse = <Event, Specification>(
+export const calculateResponse = <Event, Specification = any>(
   value: Record<string, unknown>,
   event: Event,
   reducer: ResponseReducer<Event>,
