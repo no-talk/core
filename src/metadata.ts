@@ -21,7 +21,7 @@ export type MetadataList = {
 
 export type RequestReducer<Event> = (value: Record<string, unknown>, event: Event, metadata: Metadata<unknown>) => Record<string, unknown>;
 
-export const calculateRequest = <Event, Specification = any>(
+export const calculateRequest = <Event, Specification>(
   value: Record<string, unknown>,
   event: Event,
   reducer: RequestReducer<Event>,
@@ -42,12 +42,12 @@ export const calculateRequest = <Event, Specification = any>(
 
 export type ResponseReducer<Event> = (value: Record<string, unknown>, event: Event, metadata: Metadata<unknown>) => Record<string, unknown>;
 
-export const calculateResponse = <Event, Specification = any>(
+export const calculateResponse = <Event, Specification>(
   value: Record<string, unknown>,
   event: Event,
   reducer: ResponseReducer<Event>,
   target: Target<Specification>,
-) => {
+): any => {
   const recursion = (value: Record<string, unknown>, list?: MetadataList): Specification => {
     if (!list) {
       return value as Specification;
